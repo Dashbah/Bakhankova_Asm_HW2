@@ -1,22 +1,22 @@
-	.file	"getResult.c"
-	.intel_syntax noprefix
-	.text
-	.globl	getResult
-	.type	getResult, @function
+	.file	"getResult.c"          # название файла, можно удалить 
+	.intel_syntax noprefix         # используемый синтаксис
+	.text                          # начало секции
+	.globl	getResult              # объявление глобальной переменной (функции)
+	.type	getResult, @function   # и ее характеристик
 getResult:
 	endbr64
-	push	rbp
-	mov	rbp, rsp
-	mov	DWORD PTR -4[rbp], 0
+	push	rbp                    # пролог
+	mov	rbp, rsp               #
+	mov	DWORD PTR -4[rbp], 0   # подготовка места под переменную i
 	jmp	.L2
 .L7:
-	mov	eax, DWORD PTR -4[rbp]
+	mov	eax, DWORD PTR -4[rbp]      # кладем в регистр eax значение на стеке i
 	cdqe
-	lea	rdx, str[rip]
-	movzx	eax, BYTE PTR [rax+rdx]
-	cmp	al, 40
-	jne	.L3
-	mov	eax, DWORD PTR checker[rip]
+	lea	rdx, str[rip]               # помещаем в регистр текущий элемент строки 
+	movzx	eax, BYTE PTR [rax+rdx]     # 
+	cmp	al, 40                      # сравнение текущего элемента строки с '('
+	jne	.L3                         # если не равно - прыгаем в .L3
+	mov	eax, DWORD PTR checker[rip] #
 	add	eax, 1
 	mov	DWORD PTR checker[rip], eax
 	jmp	.L4
