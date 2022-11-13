@@ -16,47 +16,47 @@ getResult:
 	movzx	eax, BYTE PTR [rax+rdx]     # 
 	cmp	al, 40                      # сравнение текущего элемента строки с '('
 	jne	.L3                         # если не равно - прыгаем в .L3
-	mov	eax, DWORD PTR checker[rip] #
-	add	eax, 1
-	mov	DWORD PTR checker[rip], eax
+	mov	eax, DWORD PTR checker[rip] # помещаем в регистр переменную чекер 
+	add	eax, 1                      # добавляем к ней 1
+	mov	DWORD PTR checker[rip], eax  # (возвращаем обратно на стек)
 	jmp	.L4
 .L3:
-	mov	eax, DWORD PTR -4[rbp]
+	mov	eax, DWORD PTR -4[rbp]        # кладем в регистр eax значение на стеке i
 	cdqe
-	lea	rdx, str[rip]
+	lea	rdx, str[rip]                 # помещаем в регистр текущий элемент строки
 	movzx	eax, BYTE PTR [rax+rdx]
-	cmp	al, 41
+	cmp	al, 41                        # сравнение текущего элемента строки с ')'
 	jne	.L4
+	mov	eax, DWORD PTR checker[rip]   # помещаем в регистр переменную чекер 
+	sub	eax, 1                        # отнимаем от нее 1
+	mov	DWORD PTR checker[rip], eax   # подготовка регистра для строки test
 	mov	eax, DWORD PTR checker[rip]
-	sub	eax, 1
-	mov	DWORD PTR checker[rip], eax
-	mov	eax, DWORD PTR checker[rip]
-	test	eax, eax
-	jns	.L9
+	test	eax, eax                      # проверка на положительность 
+	jns	.L9                           # jns "stores the address of the next instruction after it was called"
 	mov	eax, 0
 	jmp	.L6
 .L9:
-	nop
+	nop                                   # команда "ничего не делай"
 .L4:
-	add	DWORD PTR -4[rbp], 1
+	add	DWORD PTR -4[rbp], 1          # прибавляем 1 к переменной цикла i
 .L2:
-	mov	eax, DWORD PTR -4[rbp]
+	mov	eax, DWORD PTR -4[rbp]        # кладем в регистр eax значение на стеке i
 	cdqe
-	lea	rdx, str[rip]
+	lea	rdx, str[rip]                 # помещаем в регистр текущий элемент строки
 	movzx	eax, BYTE PTR [rax+rdx]
-	test	al, al
+	test	al, al                        
 	jne	.L7
 	mov	eax, DWORD PTR checker[rip]
 	test	eax, eax
 	jle	.L8
 	mov	eax, 0
 	jmp	.L6
-.L8:
-	mov	eax, 1
+.L8:       
+	mov	eax, 1                       # return 1
 .L6:
-	pop	rbp
+	pop	rbp                           # эпилог
 	ret
-	.size	getResult, .-getResult
+	.size	getResult, .-getResult        # ненужная метаинформация
 	.ident	"GCC: (Ubuntu 11.2.0-19ubuntu1) 11.2.0"
 	.section	.note.GNU-stack,"",@progbits
 	.section	.note.gnu.property,"a"
