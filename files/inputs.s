@@ -1,8 +1,8 @@
-	.file	"inputs.c"
+	.file	"inputs.c"       # более подробные комментарии по ассемблерному коду в файлах getResult.s и main.s
 	.intel_syntax noprefix
 	.text
 	.section	.rodata
-.LC0:
+.LC0:                               # в .LC лежат строки, которые понадобятся в ходе работы программы
 	.string	"Enter your string: "
 .LC1:
 	.string	"%s"
@@ -15,13 +15,13 @@ consoleInput:
 	mov	rbp, rsp
 	lea	rax, .LC0[rip]
 	mov	rdi, rax
-	call	puts@PLT
+	call	puts@PLT        # просим пользователя ввести строку
 	lea	rax, str[rip]
 	mov	rsi, rax
 	lea	rax, .LC1[rip]
 	mov	rdi, rax
 	mov	eax, 0
-	call	__isoc99_scanf@PLT
+	call	__isoc99_scanf@PLT   # считываем строку
 	nop
 	pop	rbp
 	ret
@@ -42,32 +42,32 @@ fileInput:
 	lea	rax, .LC2[rip]
 	mov	rdi, rax
 	mov	eax, 0
-	call	printf@PLT
+	call	printf@PLT     # просим пользователя ввести имя файла
 	lea	rax, -64[rbp]
 	mov	rsi, rax
 	lea	rax, .LC1[rip]
 	mov	rdi, rax
 	mov	eax, 0
-	call	__isoc99_scanf@PLT
+	call	__isoc99_scanf@PLT    # считываем имя файла
 	lea	rax, -64[rbp]
 	mov	esi, 0
 	mov	rdi, rax
-	call	access@PLT
+	call	access@PLT    # проверяем, существует ли такой файл
 	test	eax, eax
-	jne	.L3
+	jne	.L3           # прыгаем, если не существует
 	lea	rax, -64[rbp]
 	lea	rdx, .LC3[rip]
 	mov	rsi, rdx
 	mov	rdi, rax
-	call	fopen@PLT
-	mov	QWORD PTR -8[rbp], rax
+	call	fopen@PLT       # открываем файл
+	mov	QWORD PTR -8[rbp], rax     # -8[rbp] - файл ввода 
 	mov	rax, QWORD PTR -8[rbp]
 	lea	rdx, str[rip]
 	lea	rcx, .LC1[rip]
 	mov	rsi, rcx
 	mov	rdi, rax
 	mov	eax, 0
-	call	__isoc99_fscanf@PLT
+	call	__isoc99_fscanf@PLT   # считываем строку из файла
 	mov	eax, 1
 	jmp	.L5
 .L3:
@@ -87,9 +87,9 @@ randomGeneration:
 	push	rbp
 	mov	rbp, rsp
 	sub	rsp, 16
-	lea	rax, -16[rbp]
+	lea	rax, -16[rbp]    # -16[rbp] - time_t t
 	mov	rdi, rax
-	call	time@PLT
+	call	time@PLT      
 	mov	edi, eax
 	call	srand@PLT
 	call	rand@PLT
