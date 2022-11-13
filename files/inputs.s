@@ -91,8 +91,8 @@ randomGeneration:
 	mov	rdi, rax
 	call	time@PLT      
 	mov	edi, eax
-	call	srand@PLT
-	call	rand@PLT
+	call	srand@PLT     
+	call	rand@PLT      # здесь начинается подсчет размера строки 
 	movsx	rdx, eax
 	imul	rdx, rdx, 1374389535
 	shr	rdx, 32
@@ -100,15 +100,15 @@ randomGeneration:
 	mov	ecx, eax
 	sar	ecx, 31
 	sub	edx, ecx
-	imul	ecx, edx, 50
+	imul	ecx, edx, 50       # здесь заканчивается подсчет размера строки 
 	sub	eax, ecx
 	mov	edx, eax
 	lea	eax, 3[rdx]
-	mov	DWORD PTR -8[rbp], eax
-	mov	DWORD PTR -4[rbp], 0
+	mov	DWORD PTR -8[rbp], eax     # -8[rbp] - длина строки n
+	mov	DWORD PTR -4[rbp], 0       # -4[rbp] - переменная цикла i
 	jmp	.L7
 .L8:
-	call	rand@PLT
+	call	rand@PLT         # генерируем рандом, дальше идет арифметика по подсчету нового символа
 	mov	edx, eax
 	movsx	rax, edx
 	imul	rax, rax, 715827883
@@ -131,11 +131,11 @@ randomGeneration:
 	cdqe
 	lea	rdx, str[rip]
 	mov	BYTE PTR [rax+rdx], cl
-	add	DWORD PTR -4[rbp], 1
+	add	DWORD PTR -4[rbp], 1     # увеличиваем счетчик i
 .L7:
 	mov	eax, DWORD PTR -4[rbp]
-	cmp	eax, DWORD PTR -8[rbp]
-	jl	.L8
+	cmp	eax, DWORD PTR -8[rbp]      # сравниваем n c i
+	jl	.L8                         # если меньше - прыгаем. Иначе - выходим из цикла и выводим сообщения 
 	lea	rax, .LC4[rip]
 	mov	rdi, rax
 	call	puts@PLT
@@ -148,16 +148,16 @@ randomGeneration:
 	mov	edi, 10
 	call	putchar@PLT
 	nop
-	leave
+	leave                               # эпилог
 	ret
-	.size	randomGeneration, .-randomGeneration
+	.size	randomGeneration, .-randomGeneration    # дальше ненужная метаинформация 
 	.ident	"GCC: (Ubuntu 11.2.0-19ubuntu1) 11.2.0"
 	.section	.note.GNU-stack,"",@progbits
 	.section	.note.gnu.property,"a"
 	.align 8
 	.long	1f - 0f
 	.long	4f - 1f
-	.long	5
+	.long	5        
 0:
 	.string	"GNU"
 1:
