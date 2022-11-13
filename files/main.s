@@ -129,22 +129,22 @@ main:
 	call	clock@PLT                  # цикл закончился, вычисляем время сейчас 
 	sub	rax, QWORD PTR -24[rbp]
 	mov	QWORD PTR -24[rbp], rax
-	cmp	BYTE PTR -1[rbp], 0
+	cmp	BYTE PTR -1[rbp], 0        # сравниваем результат с 0. Если равен - последовательность неверная
 	je	.L11
-	lea	rax, .LC9[rip]
+	lea	rax, .LC9[rip]             # если не равен, то берем из .LC9 сообщение о том, что она правильная 
 	mov	rdi, rax
 	mov	eax, 0
 	call	printf@PLT
-	mov	rax, QWORD PTR -16[rbp]
-	mov	rcx, rax
+	mov	rax, QWORD PTR -16[rbp]    # в -16[rbp] лежит ссылка на файл 
+	mov	rcx, rax                   # (не уверна насчет ссылки, но оно точно связано с файлом)
 	mov	edx, 23
 	mov	esi, 1
 	lea	rax, .LC9[rip]
 	mov	rdi, rax
-	call	fwrite@PLT
+	call	fwrite@PLT                 # записываем в файл результат 
 	jmp	.L12
-.L11:
-	lea	rax, .LC10[rip]
+.L11:                                   # записываем в файл результат о неверной последовательности 
+	lea	rax, .LC10[rip]       
 	mov	rdi, rax
 	mov	eax, 0
 	call	printf@PLT
@@ -155,20 +155,20 @@ main:
 	lea	rax, .LC11[rip]
 	mov	rdi, rax
 	call	fwrite@PLT
-.L12:
+.L12:                            # выводим сообщение об времени исполнения
 	lea	rax, .LC12[rip]
 	mov	rdi, rax
 	mov	eax, 0
 	call	printf@PLT
-	mov	rax, QWORD PTR -24[rbp]
+	mov	rax, QWORD PTR -24[rbp]    # -24[rbp] - переменная t - время 
 	mov	esi, eax
 	lea	rax, .LC4[rip]
 	mov	rdi, rax
 	mov	eax, 0
-	call	printf@PLT
+	call	printf@PLT                
 	mov	eax, 0
 .L13:
-	leave
+	leave                # эпилог
 	ret
 	.size	main, .-main           # дальше ненужная метаинформация 
 	.ident	"GCC: (Ubuntu 11.2.0-19ubuntu1) 11.2.0"
