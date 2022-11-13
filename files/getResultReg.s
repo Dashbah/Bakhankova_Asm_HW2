@@ -29,6 +29,8 @@ getResult:
 	jne	.L4
 	mov	eax, DWORD PTR checker[rip]
 	sub	eax, 1
+	mov	DWORD PTR checker[rip], eax
+	mov	eax, DWORD PTR checker[rip]
 	test	eax, eax
 	jns	.L9
 	mov	eax, 0
